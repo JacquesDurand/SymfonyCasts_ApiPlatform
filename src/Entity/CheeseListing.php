@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use App\Repository\CheeseListingRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
@@ -18,6 +21,8 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *     denormalizationContext={"groups":{"cheese_listing:write"},"swagger_definition_name"="Write"}
  * )
  * @ORM\Entity(repositoryClass=CheeseListingRepository::class)
+ * @ApiFilter(BooleanFilter::class,properties={"isPublished"})
+ * @ApiFilter(SearchFilter::class,properties={"title": "partial"})
  */
 class CheeseListing
 {
