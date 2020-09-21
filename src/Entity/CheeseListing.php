@@ -9,8 +9,10 @@ use App\Repository\CheeseListingRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 
 /**
  * @ApiResource(
@@ -22,7 +24,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * )
  * @ORM\Entity(repositoryClass=CheeseListingRepository::class)
  * @ApiFilter(BooleanFilter::class,properties={"isPublished"})
- * @ApiFilter(SearchFilter::class,properties={"title": "partial"})
+ * @ApiFilter(SearchFilter::class,properties={"title": "partial", "description":"partial"})
+ * @ApiFilter(RangeFilter::class,properties={"price"})
+ * @ApiFilter(PropertyFilter::class)
  */
 class CheeseListing
 {
@@ -82,6 +86,21 @@ class CheeseListing
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+
+    /**
+     * @Groups("cheese_listing:read")
+     * @return string|null
+     */
+    public function getShortDescription () : ?string {
+
+        if (strlen($this->description) < 25) {
+            return $this->description ;
+        }
+        else {
+            return substr(strip_tags($this->description),0, 25).'...' ;
+        }
     }
 
 
