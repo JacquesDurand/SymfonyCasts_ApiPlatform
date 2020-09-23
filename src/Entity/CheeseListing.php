@@ -13,6 +13,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -40,12 +41,20 @@ class CheeseListing
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"cheese_listing:read","cheese_listing:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="2",
+     *     max="50",
+     *     maxMessage="50 chars or less"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"cheese_listing:read"})
+     * @Assert\NotBlank()
+     *
      */
     private $description;
 
@@ -54,6 +63,7 @@ class CheeseListing
      *
      * @ORM\Column(type="integer")
      * @Groups({"cheese_listing:read","cheese_listing:write"})
+     * @Assert\NotBlank()
      */
     private $price;
 
