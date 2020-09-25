@@ -77,6 +77,13 @@ class CheeseListing
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="cheeseListings")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"cheese_listing:read","cheese_listing:write"})
+     */
+    private $owner;
+
     public function __construct(string $title = null)
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -170,6 +177,18 @@ class CheeseListing
     public function getCreatedAtAgo(): string
     {
         return Carbon::instance($this->getCreatedAt())->diffForHumans();
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 
 }
